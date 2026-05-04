@@ -4,6 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>万家俱乐部 - 专业游戏护航服务平台</title>
+
+    <!-- 网站头像/图标设置 -->
+    <link rel="icon" type="image/jpeg" href="https://zuibian.github.io/title.jpg">
+    <link rel="shortcut icon" href="https://zuibian.github.io/title.jpg">
+    <link rel="apple-touch-icon" href="https://zuibian.github.io/title.jpg">
+
+    <!-- 社交媒体分享卡片 -->
+    <meta property="og:title" content="万家俱乐部 - 专业游戏护航服务平台">
+    <meta property="og:description" content="专业三角洲行动护航服务，安全高效提升游戏体验，24小时在线服务">
+    <meta property="og:image" content="https://zuibian.github.io/title.jpg">
+    <meta property="og:url" content="https://zuibian.github.io">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+
     <!-- Tailwind CSS v3 -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font Awesome -->
@@ -121,7 +135,7 @@
         <div class="absolute top-0 left-0 w-full h-full bg-[url('res\\1.jpg')] bg-cover bg-center"></div>
     </div>
 
-    <!-- 导航栏（已移除顶级打手入口） -->
+    <!-- 导航栏 -->
     <header class="relative z-10 glass-effect border-b border-white/10">
         <nav class="container mx-auto px-4 py-4 flex items-center justify-between">
             <div class="flex items-center space-x-2">
@@ -270,7 +284,7 @@
             </div>
         </section>
 
-        <!-- 联系我们：支付宝好友码 (ZFB.png) + QQ账号 (已修改为3614638670) -->
+        <!-- 联系我们 -->
         <section class="py-16 bg-dark-light">
             <div class="container mx-auto px-4">
                 <div class="text-center mb-10">
@@ -278,7 +292,6 @@
                     <p class="text-text-secondary">扫码添加支付宝好友或直接联系QQ客服，获取专属护航方案</p>
                 </div>
                 <div class="max-w-4xl mx-auto grid md:grid-cols-2 gap-10 items-start">
-                    <!-- 支付宝好友码卡片 使用本地相对路径 ZFB.png -->
                     <div class="contact-card glass-effect rounded-2xl p-6 text-center border border-white/10 transition-all">
                         <div class="flex justify-center mb-4">
                             <div class="bg-white/10 rounded-full p-3 inline-block">
@@ -287,16 +300,12 @@
                         </div>
                         <h3 class="text-xl font-bold text-white mb-3">支付宝好友</h3>
                         <div class="flex justify-center mb-4">
-                            <img src="res\ZFB.png"
-                                 alt="支付宝好友码"
-                                 class="w-48 h-48 object-contain rounded-xl bg-white p-2 shadow-md"
-                                 onerror="this.onerror=null;this.src='https://picsum.photos/200/200?grayscale';alert('提示：未找到 ZFB.png 文件，请确认图片与网页在同一目录下，且文件名大小写正确。');">
+                            <img src="ZFB.png" alt="支付宝好友码" class="w-48 h-48 object-contain rounded-xl bg-white p-2 shadow-md" onerror="this.onerror=null;this.src='https://picsum.photos/200/200?grayscale';alert('提示：未找到 ZFB.png 文件，请确认图片与网页在同一目录下。');">
                         </div>
                         <p class="text-text-secondary text-sm">保存图片到相册，打开支付宝“扫一扫” → 相册选取该二维码，即可添加好友</p>
                         <div class="mt-4 inline-block bg-primary/30 px-4 py-1 rounded-full text-xs text-accent">官方支付宝 · 安全快捷</div>
                     </div>
 
-                    <!-- QQ联系方式卡片 - QQ号已修改为3614638670 -->
                     <div class="contact-card glass-effect rounded-2xl p-6 text-center border border-white/10 transition-all">
                         <div class="flex justify-center mb-4">
                             <div class="bg-white/10 rounded-full p-3 inline-block">
@@ -336,7 +345,7 @@
     </footer>
 
     <script>
-        // 复制QQ号功能 - 已更新为新QQ号
+        // 复制QQ号功能
         window.copyQQ = function() {
             const qqNumber = "3614638670";
             navigator.clipboard.writeText(qqNumber).then(() => {
