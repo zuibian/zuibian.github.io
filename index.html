@@ -3,450 +3,291 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>加密聊天系统 - 技术展示</title>
+    <title>聊天室项目说明</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
-            min-height: 100vh;
-            color: white;
+            margin: 0;
+            padding: 20px;
+            background: #e9ecef;
+            font-family: 'Segoe UI', 'Microsoft YaHei', system-ui, sans-serif;
+            color: #212529;
+            line-height: 1.5;
         }
-
-        /* 导航栏 - 动态积木: 水平布局容器 + 样式积木 */
-        .navbar {
-            background: rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(10px);
-            padding: 15px 50px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 100;
-        }
-
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .nav-links a {
-            color: white;
-            text-decoration: none;
-            margin-left: 30px;
-            transition: 0.3s;
-        }
-
-        .nav-links a:hover { color: #667eea; }
-
-        /* 主容器 - 动态积木: 容器积木 + 内边距 */
-        .container {
-            max-width: 1200px;
+        .doc {
+            max-width: 1100px;
             margin: 0 auto;
-            padding: 100px 20px 50px;
+            background: #fff;
+            padding: 25px 30px;
+            border: 1px solid #ced4da;
         }
-
-        /* Hero区域 - 动态积木: 垂直布局 + 居中 + 动画 */
-        .hero {
-            text-align: center;
-            margin-bottom: 60px;
+        h1 {
+            font-size: 24px;
+            font-weight: 600;
+            margin: 0 0 6px 0;
+            color: #1864ab;
+            border-left: 4px solid #1864ab;
+            padding-left: 12px;
         }
-
-        .hero h1 {
-            font-size: 48px;
-            margin-bottom: 20px;
-            animation: fadeInUp 1s ease;
+        .sub {
+            color: #5c6f87;
+            font-size: 13px;
+            margin-bottom: 25px;
+            padding-left: 16px;
         }
-
-        .hero h1 span {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .hero p {
+        h2 {
             font-size: 18px;
-            color: #ccc;
-            animation: fadeInUp 1s ease 0.2s both;
+            font-weight: 600;
+            margin: 20px 0 12px 0;
+            background: #f1f3f5;
+            padding: 6px 12px;
+            border-left: 3px solid #339af0;
         }
-
-        /* 技术卡片网格 - 动态积木: 网格布局积木 */
-        .tech-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px;
-            margin-bottom: 60px;
+        h3 {
+            font-size: 15px;
+            font-weight: 600;
+            margin: 12px 0 8px 0;
+            color: #2c6e9e;
         }
-
-        /* 卡片 - 动态积木: 卡片组件 + 悬停动画积木 */
-        .tech-card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 30px;
-            text-align: center;
-            transition: all 0.4s ease;
-            cursor: pointer;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            animation: fadeInUp 0.6s ease both;
+        .file-tree {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 12px 18px;
+            font-family: 'Consolas', monospace;
+            font-size: 13px;
+            margin: 10px 0;
+            line-height: 1.6;
         }
-
-        .tech-card:nth-child(1) { animation-delay: 0.1s; }
-        .tech-card:nth-child(2) { animation-delay: 0.2s; }
-        .tech-card:nth-child(3) { animation-delay: 0.3s; }
-        .tech-card:nth-child(4) { animation-delay: 0.4s; }
-
-        /* 动态效果: 鼠标悬停动画 */
-        .tech-card:hover {
-            transform: translateY(-10px) scale(1.02);
-            background: rgba(255, 255, 255, 0.2);
-            border-color: #667eea;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        ul, .funclist {
+            margin: 6px 0 10px 0;
+            padding-left: 22px;
         }
-
-        .tech-icon { font-size: 60px; margin-bottom: 20px; }
-        .tech-card h3 { font-size: 24px; margin-bottom: 15px; }
-        .tech-card p { color: #ddd; line-height: 1.6; }
-
-        .badge {
-            display: inline-block;
-            background: rgba(102, 126, 234, 0.3);
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            margin-top: 15px;
+        li {
+            margin: 5px 0;
+            font-size: 14px;
+        }
+        code {
+            background: #f1f3f4;
+            padding: 2px 6px;
             font-family: monospace;
+            font-size: 13px;
+            border-radius: 4px;
         }
-
-        /* 安全特性区域 - 动态积木: 容器 + 网格 */
-        .features-section {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 30px;
-            padding: 40px;
-            margin-bottom: 60px;
-            animation: fadeInUp 0.8s ease 0.5s both;
+        .table-wrap {
+            margin: 12px 0;
         }
-
-        .features-section h2 {
-            text-align: center;
-            margin-bottom: 30px;
-            font-size: 32px;
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
         }
-
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
+        td, th {
+            border: 1px solid #dee2e6;
+            padding: 8px 10px;
+            vertical-align: top;
         }
-
-        .feature-item {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 15px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 15px;
-            transition: 0.3s;
+        th {
+            background: #f1f3f5;
+            font-weight: 600;
         }
-
-        .feature-item:hover {
-            background: rgba(102, 126, 234, 0.2);
-            transform: translateX(5px);
-        }
-
-        .feature-icon { font-size: 28px; }
-        .feature-text h4 { font-size: 16px; margin-bottom: 5px; }
-        .feature-text p { font-size: 12px; color: #aaa; }
-
-        /* 架构流程图 - 动态积木: 水平布局容器 */
-        .architecture {
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 30px;
-            padding: 40px;
-            margin-bottom: 60px;
-        }
-
-        .architecture h2 {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
         .flow {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            align-items: center;
-            gap: 15px;
+            background: #1e2a3a;
+            color: #d4d8dd;
+            padding: 12px;
+            font-family: monospace;
+            font-size: 12px;
+            overflow-x: auto;
+            margin: 12px 0;
         }
-
-        .flow-node {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            padding: 15px 25px;
-            border-radius: 15px;
-            text-align: center;
-            min-width: 120px;
-            animation: pulse 2s infinite;
-        }
-
-        .flow-node small { font-size: 11px; opacity: 0.8; }
-        .flow-arrow { font-size: 24px; color: #667eea; animation: bounce 1s infinite; }
-
-        /* 统计数字区域 - 动态计数器积木 */
-        .stats-section {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 30px;
-            margin-bottom: 60px;
-        }
-
-        .stat-card {
-            text-align: center;
-            padding: 30px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 20px;
-        }
-
-        .stat-number {
-            font-size: 48px;
-            font-weight: bold;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .stat-label { margin-top: 10px; color: #ccc; }
-
-        /* CTA按钮 - 动态积木: 按钮组件 + 点击事件 */
-        .cta {
-            text-align: center;
-            padding: 40px;
-        }
-
-        .cta-button {
-            background: linear-gradient(135deg, #667eea, #764ba2);
+        hr {
+            margin: 20px 0;
             border: none;
-            padding: 15px 40px;
-            font-size: 18px;
-            color: white;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: 0.3s;
-            animation: pulse 2s infinite;
+            border-top: 1px solid #dee2e6;
         }
-
-        .cta-button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
-        }
-
-        /* 动态动画积木 */
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateX(0); }
-            50% { transform: translateX(5px); }
-        }
-
-        /* 滚动动画触发类 */
-        .animate-on-scroll {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.6s ease;
-        }
-
-        .animate-on-scroll.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        @media (max-width: 768px) {
-            .navbar { padding: 15px 20px; }
-            .nav-links a { margin-left: 15px; font-size: 14px; }
-            .hero h1 { font-size: 32px; }
-            .flow { flex-direction: column; }
-            .flow-arrow { transform: rotate(90deg); }
+        .footer {
+            margin-top: 25px;
+            padding-top: 15px;
+            border-top: 1px solid #dee2e6;
+            font-size: 12px;
+            color: #6c757d;
+            text-align: center;
         }
     </style>
 </head>
 <body>
-    <!-- 导航栏 - Node-App积木: 水平布局容器 + 文本积木 -->
-    <nav class="navbar">
-        <div class="logo">🔐 SecureChat</div>
-        <div class="nav-links">
-            <a href="#tech">加密技术</a>
-            <a href="#features">安全特性</a>
-            <a href="#arch">架构设计</a>
-        </div>
-    </nav>
+<div class="doc">
+    <h1>安全聊天室项目文档</h1>
+    <div class="sub">RSA + AES-GCM 加密 · PyQt5客户端 · Python服务端</div>
 
-    <div class="container">
-        <!-- Hero区域 - 动态积木: 垂直布局 + 动画积木 -->
-        <div class="hero">
-            <h1>特制<span>加密</span>聊天系统</h1>
-            <p>加密技术，保护每一次通信安全</p>
-        </div>
-
-        <!-- 技术卡片网格 - 动态积木: 网格布局 + 卡片组件 + 点击事件积木 -->
-        <div id="tech" class="tech-grid">
-            <div class="tech-card" onclick="showDetail('otp')">
-                <div class="tech-icon">⏰</div>
-                <h3>OTP 动态密钥</h3>
-                <p>基于时间的一次性密码算法，每30秒自动更换会话密钥</p>
-                <span class="badge">RFC 6238 | TOTP</span>
-            </div>
-            <div class="tech-card" onclick="showDetail('aes')">
-                <div class="tech-icon">🔒</div>
-                <h3>AES-256 加密</h3>
-                <p>美国联邦政府标准加密算法，256位密钥强度</p>
-                <span class="badge">FIPS 197 | AES-CBC</span>
-            </div>
-            <div class="tech-card" onclick="showDetail('sha')">
-                <div class="tech-icon">🔑</div>
-                <h3>SHA256 密钥派生</h3>
-                <p>将OTP动态码派生为固定长度密钥，确保密钥强度</p>
-                <span class="badge">FIPS 180-4 | HMAC</span>
-            </div>
-            <div class="tech-card" onclick="showDetail('base64')">
-                <div class="tech-icon">📦</div>
-                <h3>Base64 编码传输</h3>
-                <p>将二进制密文转换为文本格式，确保JSON传输兼容</p>
-                <span class="badge">RFC 4648</span>
-            </div>
-        </div>
-
-        <!-- 安全特性区域 - 动态积木: 容器 + 网格布局 -->
-        <div id="features" class="features-section">
-            <h2>🛡️ 多层安全防护体系</h2>
-            <div class="features-grid">
-                <div class="feature-item"><div class="feature-icon">🔐</div><div class="feature-text"><h4>端到端加密</h4><p>消息仅收发双方可解密</p></div></div>
-                <div class="feature-item"><div class="feature-icon">🔄</div><div class="feature-text"><h4>动态会话密钥</h4><p>每次登录独立密钥</p></div></div>
-                <div class="feature-item"><div class="feature-icon">⏱️</div><div class="feature-text"><h4>时间戳防重放</h4><p>防止数据包被重复利用</p></div></div>
-                <div class="feature-item"><div class="feature-icon">🎭</div><div class="feature-text"><h4>双密钥隔离</h4><p>用户名/密码独立加密</p></div></div>
-                <div class="feature-item"><div class="feature-icon">📝</div><div class="feature-text"><h4>完整性校验</h4><p>SHA256哈希防篡改</p></div></div>
-                <div class="feature-item"><div class="feature-icon">🔑</div><div class="feature-text"><h4>随机会话ID</h4><p>UUID防会话劫持</p></div></div>
-            </div>
-        </div>
-
-        <!-- 架构流程图 - 动态积木: 水平布局容器 + 动画积木 -->
-        <div id="arch" class="architecture">
-            <h2>🏗️ 加密通信架构</h2>
-            <div class="flow">
-                <div class="flow-node">客户端<br><small>Client</small></div>
-                <div class="flow-arrow">→</div>
-                <div class="flow-node">OTP生成<br><small>动态密钥</small></div>
-                <div class="flow-arrow">→</div>
-                <div class="flow-node">SHA256<br><small>密钥派生</small></div>
-                <div class="flow-arrow">→</div>
-                <div class="flow-node">AES-256<br><small>加密消息</small></div>
-                <div class="flow-arrow">→</div>
-                <div class="flow-node">Base64<br><small>编码传输</small></div>
-                <div class="flow-arrow">→</div>
-                <div class="flow-node">服务器<br><small>转发</small></div>
-            </div>
-        </div>
-
-        <!-- 统计数字区域 - 动态计数器积木 -->
-        <div class="stats-section">
-            <div class="stat-card"><div class="stat-number" id="counter1">256</div><div class="stat-label">AES密钥强度(bit)</div></div>
-            <div class="stat-card"><div class="stat-number" id="counter2">30</div><div class="stat-label">OTP刷新周期(秒)</div></div>
-            <div class="stat-card"><div class="stat-number" id="counter3">2^256</div><div class="stat-label">暴力破解难度</div></div>
-            <div class="stat-card"><div class="stat-number" id="counter4">4</div><div class="stat-label">加密技术层数</div></div>
-        </div>
-
-        <!-- 技术栈标签 - 动态积木: 徽章组件 -->
-        <div class="features-section">
-            <h2>📚 技术栈</h2>
-            <div style="display: flex; flex-wrap: wrap; gap: 12px; justify-content: center;">
-                <span class="badge" style="background: #667eea;">Python 3.x</span>
-                <span class="badge" style="background: #667eea;">Socket TCP</span>
-                <span class="badge" style="background: #667eea;">PyOTP</span>
-                <span class="badge" style="background: #667eea;">PyCryptodome</span>
-                <span class="badge" style="background: #667eea;">Threading</span>
-                <span class="badge" style="background: #667eea;">JSON</span>
-                <span class="badge" style="background: #667eea;">PyQt5</span>
-                <span class="badge" style="background: #667eea;">UUID</span>
-            </div>
-        </div>
-
-        <!-- CTA按钮 - 动态积木: 按钮组件 + 点击事件 -->
-        <div class="cta">
-            <button class="cta-button" onclick="showDemo()">🚀 查看技术演示</button>
-        </div>
+    <!-- 目录结构 -->
+    <h2>一、项目目录结构</h2>
+    <div class="file-tree">
+chat_project/<br>
+├── common/<br>
+│   ├── __init__.py<br>
+│   ├── crypto.py          # 加密相关：AES、RSA、密钥生成<br>
+│   ├── protocol.py        # 消息类型常量<br>
+│   └── config.py          # 配置：IP、端口、密钥文件名<br>
+├── client/<br>
+│   ├── __init__.py<br>
+│   ├── main.py            # 客户端入口<br>
+│   ├── network.py         # 网络连接、密钥交换、登录请求<br>
+│   └── ui.py              # PyQt5聊天界面<br>
+├── server/<br>
+│   ├── __init__.py<br>
+│   ├── main.py            # 服务端入口<br>
+│   ├── handler.py         # 客户端处理逻辑<br>
+│   └── storage.py         # 用户数据、在线状态<br>
+└── start.py               # 启动脚本
     </div>
 
-    <script>
-        // 动态计数器积木逻辑
-        function animateNumber(element, target, suffix = '') {
-            let current = 0;
-            const step = Math.ceil(target / 50);
-            const timer = setInterval(() => {
-                current += step;
-                if (current >= target) {
-                    element.textContent = target + suffix;
-                    clearInterval(timer);
-                } else {
-                    element.textContent = current + suffix;
-                }
-            }, 30);
-        }
+    <!-- common模块 -->
+    <h2>二、common模块 — 公共部分</h2>
+    
+    <h3>1. crypto.py 加密函数</h3>
+    <ul>
+        <li><code>enc_msg(msg, key)</code> — AES-256-GCM加密，返回包含 nonce、密文、tag 的字典</li>
+        <li><code>dec_msg(data, key)</code> — 解密并验证GCM标签，解密失败抛异常</li>
+        <li><code>rsa_enc(pub_pem, data)</code> — RSA公钥加密（OAEP填充）</li>
+        <li><code>rsa_dec(priv_pem, data)</code> — RSA私钥解密</li>
+        <li><code>gen_rsa()</code> — 生成RSA-2048密钥对，返回PEM格式字符串</li>
+        <li><code>check_keys()</code> — 检查密钥文件是否存在，不存在则自动生成</li>
+    </ul>
+    <p style="font-size:13px; color:#555;">注：<code>enc_with_pwd/dec_with_pwd</code> 函数虽然在代码里但登录流程没用上，忽略。</p>
 
-        // 页面加载时启动计数器（相当于 Node-App 的"当页面加载时"积木）
-        setTimeout(() => {
-            animateNumber(document.getElementById('counter1'), 256, '');
-            animateNumber(document.getElementById('counter2'), 30, '');
-            animateNumber(document.getElementById('counter4'), 4, '');
-        }, 500);
+    <h3>2. protocol.py 消息类型</h3>
+    <div class="table-wrap">
+        <table>
+            <tr><th>常量</th><th>值</th><th>说明</th></tr>
+            <tr><td>TYPE_KEY_EXCHANGE</td><td>'key_exchange'</td><td>客户端发送加密的会话密钥</td></tr>
+            <tr><td>TYPE_KEY_EXCHANGE_OK</td><td>'key_exchange_ok'</td><td>服务端确认密钥交换完成</td></tr>
+            <tr><td>TYPE_RECV_MESSAGE</td><td>'recv_message'</td><td>服务端转发消息给接收方</td></tr>
+            <tr><td>TYPE_ONLINE_USERS</td><td>'online_users'</td><td>服务端返回在线用户列表</td></tr>
+            <tr><td>TYPE_KICK</td><td>'kick'</td><td>踢出通知（异地登录）</td></tr>
+            <tr><td>TYPE_CLIENT_BYE</td><td>'client_bye'</td><td>客户端退出通知</td></tr>
+            <tr><td>CMD_LOGIN</td><td>'login'</td><td>登录命令</td></tr>
+            <tr><td>CMD_SEND_MESSAGE</td><td>'send_message'</td><td>发送消息命令</td></tr>
+            <tr><td>CMD_GET_ONLINE_USERS</td><td>'get_online_users'</td><td>请求在线用户列表</td></tr>
+        </table>
+    </div>
 
-        // 卡片点击详情（相当于 Node-App 的"当元素被点击"积木）
-        function showDetail(type) {
-            const details = {
-                otp: '⏰ OTP (Time-based One-Time Password)\n\n原理：客户端和服务器共享一个密钥，根据当前时间每隔30秒生成一个6位数字验证码。\n\n优势：密钥不通过网络传输，每次登录密码都不同，防止抓包重放攻击。',
-                aes: '🔒 AES-256 (Advanced Encryption Standard)\n\n原理：美国国家标准技术研究院认证的对称加密算法，使用256位密钥进行CBC模式加密。\n\n优势：目前无有效破解方法，被美国政府用于机密信息保护。',
-                sha: '🔑 SHA256 (Secure Hash Algorithm 256)\n\n原理：将任意长度输入压缩为256位固定长度输出，不可逆。\n\n用途：将6位OTP派生为32字节AES密钥，同时用于完整性校验。',
-                base64: '📦 Base64 Encoding\n\n原理：将二进制数据转换为64个可打印字符（A-Z a-z 0-9 + /）\n\n用途：AES加密后得到的是bytes，JSON无法直接传输，Base64编码后变成字符串。'
-            };
-            alert(details[type] || '了解更多加密技术');
-        }
+    <h3>3. config.py 配置项</h3>
+    <ul>
+        <li><code>SERVER_HOST = '127.0.0.1'</code></li>
+        <li><code>SERVER_PORT = 9999</code></li>
+        <li><code>RSA_PRIVATE_KEY_FILE = "Own_key.Encryption"</code></li>
+        <li><code>RSA_PUBLIC_KEY_FILE = "Public_key.Encryption"</code></li>
+        <li><code>TIMEOUT_SECONDS = 60</code> — 服务端socket超时时间</li>
+    </ul>
 
-        // 演示按钮点击（相当于 Node-App 的"当按钮被点击"积木）
-        function showDemo() {
-            alert('🔐 加密流程演示\n\n' +
-                  '1️⃣ 客户端生成OTP: 123456\n' +
-                  '2️⃣ SHA256派生密钥: 8f0e2e... (32字节)\n' +
-                  '3️⃣ AES-256加密消息: "Hello" → "gAAAAAB..."\n' +
-                  '4️⃣ Base64编码后通过JSON传输\n' +
-                  '5️⃣ 服务器用相同OTP解密\n\n' +
-                  '✅ 全程密文传输，中间人无法解读');
-        }
+    <!-- client模块 -->
+    <h2>三、client模块 — 客户端</h2>
+    
+    <h3>1. main.py 启动流程</h3>
+    <ul>
+        <li>调用 <code>load_pub_key()</code> 读取RSA公钥文件</li>
+        <li><code>os.urandom(32)</code> 生成随机AES会话密钥</li>
+        <li><code>conn_server()</code> 连接服务端</li>
+        <li><code>do_key_ex()</code> 用RSA公钥加密会话密钥并发给服务端</li>
+        <li>用户输入用户名和密码</li>
+        <li><code>enc_msg(f"{user}:{pwd}", session_key)</code> 加密登录凭证</li>
+        <li><code>send_login_info()</code> 发送登录请求，接收返回的token</li>
+        <li>登录成功后调用 <code>start_ui()</code> 启动聊天窗口</li>
+    </ul>
 
-        // 滚动动画（相当于 Node-App 的"当元素进入视口"积木）
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
-            });
-        }, { threshold: 0.1 });
+    <h3>2. network.py 网络函数</h3>
+    <ul>
+        <li><code>conn_server()</code> — 创建socket连接服务器</li>
+        <li><code>do_key_ex(sock, pub_key, session_key)</code> — RSA加密session_key并发送，等待确认</li>
+        <li><code>send_login_info(sock, encrypted_creds)</code> — 发送加密的登录信息，返回服务端响应</li>
+        <li><code>send_raw_data(sock, data)</code> — 发送原始数据</li>
+    </ul>
 
-        document.querySelectorAll('.tech-card, .features-section, .architecture, .stat-card').forEach(el => {
-            el.classList.add('animate-on-scroll');
-            observer.observe(el);
-        });
-    </script>
+    <h3>3. ui.py 聊天窗口 (ChatWin)</h3>
+    <ul>
+        <li>继承 <code>QMainWindow</code>，使用 <code>pyqtSignal</code> 处理跨线程消息更新</li>
+        <li>界面组件：消息区域(QTextEdit)、用户下拉框(QComboBox)、输入框(QLineEdit)、发送按钮、退出按钮</li>
+        <li><code>send_msg()</code> — 获取目标用户和消息内容，AES加密后发送 <code>send_message</code> 命令</li>
+        <li><code>get_users()</code> — 被QTimer触发（间隔1秒），请求在线用户列表</li>
+        <li><code>start_recv()</code> — 独立线程循环接收数据：
+            <ul>
+                <li><code>type == 'recv_message'</code> → 解密并显示消息</li>
+                <li><code>type == 'online_users'</code> → 更新下拉框和状态栏</li>
+                <li><code>type == 'kick'</code> → 显示被踢提示并退出</li>
+            </ul>
+        </li>
+        <li><code>exit_chat()</code> — 发送 <code>client_bye</code>，关闭socket，退出界面</li>
+    </ul>
+
+    <!-- server模块 -->
+    <h2>四、server模块 — 服务端</h2>
+
+    <h3>1. main.py 服务端入口</h3>
+    <ul>
+        <li>创建socket，绑定 <code>127.0.0.1:9999</code>，开始监听</li>
+        <li>循环accept，每个客户端新建线程执行 <code>ClientHandler(sock, addr).handle()</code></li>
+    </ul>
+
+    <h3>2. handler.py ClientHandler类</h3>
+    <ul>
+        <li><code>handle()</code> — 主循环，先处理密钥交换，然后处理登录、消息等命令</li>
+        <li><code>do_key_ex(data)</code> — 读取RSA私钥，解密获得AES会话密钥，保存在 <code>self.key</code></li>
+        <li><code>do_login(data)</code> — 解密登录凭证，调用 <code>check_pwd()</code> 验证，成功则生成token并存储会话信息</li>
+        <li><code>send_msg(to_user, encrypted)</code> — 用发送方密钥解密消息，再用接收方密钥重新加密，转发给目标用户</li>
+        <li><code>send_users()</code> — 返回当前所有在线用户名</li>
+        <li><code>cleanup()</code> — 断开连接时从 online_users、session_to_user、user_session_key 中移除记录</li>
+        <li>踢出逻辑：登录时如果用户已在 online_users 中，给旧socket发送 kick 消息</li>
+    </ul>
+
+    <h3>3. storage.py 数据存储</h3>
+    <ul>
+        <li><code>USER_DB</code> 字典：用户名 → SHA256(密码)</li>
+        <li>预置账号：alice/123456、bob/123456、charlie/password</li>
+        <li><code>online_users = {}</code> — 用户名 → socket对象</li>
+        <li><code>session_to_user = {}</code> — token → 用户名</li>
+        <li><code>user_session_key = {}</code> — 用户名 → AES会话密钥</li>
+        <li><code>check_pwd(user, pwd)</code> — 验证密码</li>
+        <li><code>add_user(user, pwd)</code> — 添加新用户</li>
+    </ul>
+
+    <!-- start.py -->
+    <h2>五、start.py 启动脚本</h2>
+    <ul>
+        <li><code>python start.py server</code> — 启动服务端</li>
+        <li><code>python start.py client</code> — 启动客户端</li>
+        <li>自动设置项目根目录到sys.path，方便模块导入</li>
+    </ul>
+
+    <!-- 通信流程 -->
+    <h2>六、通信流程</h2>
+    <div class="flow">
+客户端                                        服务端<br>
+  |---- ① key_exchange (RSA加密session_key) ---->|<br>
+  |<---- ② key_exchange_ok ----------------------|<br>
+  |---- ③ login (AES加密 user:pass) ------------>|<br>
+  |<---- ④ {code:0, session: token} -------------|<br>
+  |---- ⑤ get_online_users --------------------->|<br>
+  |<---- ⑥ online_users 列表 --------------------|<br>
+  |---- ⑦ send_message (AES加密消息) ----------->|<br>
+  |        [服务端解密 → 用接收方密钥重加密]       |<br>
+  |<---- ⑧ recv_message (转发加密消息) -----------|<br>
+  |---- ⑨ client_bye --------------------------->|<br>
+  +--- 连接关闭
+    </div>
+
+    <!-- 运行说明 -->
+    <h2>七、运行方式</h2>
+    <ul>
+        <li>安装依赖：<code>pip install pycryptodome pyqt5</code></li>
+        <li>首次运行会自动生成RSA密钥对（Own_key.Encryption 和 Public_key.Encryption）</li>
+        <li>先启动服务端：<code>python start.py server</code></li>
+        <li>再启动客户端：<code>python start.py client</code></li>
+        <li>可以同时启动多个客户端测试聊天</li>
+    </ul>
+
+    <hr>
+    <div class="footer">
+         · 根据项目源码整理
+    </div>
+</div>
 </body>
 </html>
