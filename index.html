@@ -2,9 +2,15 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>聊天室项目说明</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>安全聊天室 · 项目技术文档</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             margin: 0;
             padding: 20px;
@@ -12,28 +18,164 @@
             font-family: 'Segoe UI', 'Microsoft YaHei', system-ui, sans-serif;
             color: #212529;
             line-height: 1.5;
+            position: relative;
+            min-height: 100vh;
         }
+
+        /* 水印层 - 全屏覆盖 */
+        .watermark-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9998;
+            overflow: hidden;
+        }
+
+        .watermark-text {
+            position: absolute;
+            font-size: 14px;
+            color: rgba(0, 0, 0, 0.08);
+            font-weight: normal;
+            white-space: nowrap;
+            transform: rotate(-25deg);
+            user-select: none;
+            pointer-events: none;
+            font-family: 'Microsoft YaHei', monospace;
+        }
+
+        /* 密码遮罩层 */
+        .password-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .password-card {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            border-radius: 24px;
+            padding: 32px 28px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(79, 157, 105, 0.3);
+            animation: fadeInUp 0.4s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .password-card h3 {
+            color: #fff;
+            font-size: 24px;
+            margin-bottom: 12px;
+        }
+
+        .password-card p {
+            color: #aaa;
+            font-size: 14px;
+            margin-bottom: 24px;
+        }
+
+        .password-card input {
+            width: 100%;
+            padding: 14px 16px;
+            background: #0f0f1a;
+            border: 1px solid #2a3a4a;
+            border-radius: 12px;
+            color: white;
+            font-size: 16px;
+            margin-bottom: 20px;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .password-card input:focus {
+            border-color: #4f9d69;
+            box-shadow: 0 0 0 2px rgba(79, 157, 105, 0.3);
+        }
+
+        .password-card button {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #4f9d69, #2c7a47);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .password-card button:hover {
+            transform: translateY(-2px);
+            background: linear-gradient(135deg, #5cb37c, #3a8a55);
+        }
+
+        .error-msg {
+            color: #ff6b6b;
+            font-size: 13px;
+            margin-top: -10px;
+            margin-bottom: 16px;
+            display: none;
+        }
+
+        /* 文档主体 */
         .doc {
-            max-width: 1100px;
+            max-width: 1200px;
             margin: 0 auto;
             background: #fff;
             padding: 25px 30px;
             border: 1px solid #ced4da;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.4s ease;
+            pointer-events: none;
         }
+
+        .doc.visible {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
         h1 {
-            font-size: 24px;
+            font-size: 26px;
             font-weight: 600;
             margin: 0 0 6px 0;
             color: #1864ab;
             border-left: 4px solid #1864ab;
             padding-left: 12px;
         }
+
         .sub {
             color: #5c6f87;
             font-size: 13px;
             margin-bottom: 25px;
             padding-left: 16px;
         }
+
         h2 {
             font-size: 18px;
             font-weight: 600;
@@ -42,12 +184,14 @@
             padding: 6px 12px;
             border-left: 3px solid #339af0;
         }
+
         h3 {
             font-size: 15px;
             font-weight: 600;
             margin: 12px 0 8px 0;
             color: #2c6e9e;
         }
+
         .file-tree {
             background: #f8f9fa;
             border: 1px solid #dee2e6;
@@ -57,14 +201,17 @@
             margin: 10px 0;
             line-height: 1.6;
         }
+
         ul, .funclist {
             margin: 6px 0 10px 0;
             padding-left: 22px;
         }
+
         li {
             margin: 5px 0;
             font-size: 14px;
         }
+
         code {
             background: #f1f3f4;
             padding: 2px 6px;
@@ -72,23 +219,29 @@
             font-size: 13px;
             border-radius: 4px;
         }
+
         .table-wrap {
             margin: 12px 0;
+            overflow-x: auto;
         }
+
         table {
             width: 100%;
             border-collapse: collapse;
             font-size: 13px;
         }
+
         td, th {
             border: 1px solid #dee2e6;
             padding: 8px 10px;
             vertical-align: top;
         }
+
         th {
             background: #f1f3f5;
             font-weight: 600;
         }
+
         .flow {
             background: #1e2a3a;
             color: #d4d8dd;
@@ -98,11 +251,24 @@
             overflow-x: auto;
             margin: 12px 0;
         }
+
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 12px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 12px;
+            overflow-x: auto;
+            margin: 8px 0;
+        }
+
         hr {
             margin: 20px 0;
             border: none;
             border-top: 1px solid #dee2e6;
         }
+
         .footer {
             margin-top: 25px;
             padding-top: 15px;
@@ -111,183 +277,362 @@
             color: #6c757d;
             text-align: center;
         }
+
+        .highlight {
+            background: #e8f5e9;
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: #2e7d32;
+            font-weight: 500;
+        }
     </style>
 </head>
 <body>
-<div class="doc">
-    <h1>安全聊天室项目文档</h1>
-    <div class="sub">RSA + AES-GCM 加密 · PyQt5客户端 · Python服务端</div>
 
-    <!-- 目录结构 -->
-    <h2>一、项目目录结构</h2>
-    <div class="file-tree">
-chat_project/<br>
-├── common/<br>
-│   ├── __init__.py<br>
-│   ├── crypto.py          # 加密相关：AES、RSA、密钥生成<br>
-│   ├── protocol.py        # 消息类型常量<br>
-│   └── config.py          # 配置：IP、端口、密钥文件名<br>
-├── client/<br>
-│   ├── __init__.py<br>
-│   ├── main.py            # 客户端入口<br>
-│   ├── network.py         # 网络连接、密钥交换、登录请求<br>
-│   └── ui.py              # PyQt5聊天界面<br>
-├── server/<br>
-│   ├── __init__.py<br>
-│   ├── main.py            # 服务端入口<br>
-│   ├── handler.py         # 客户端处理逻辑<br>
-│   └── storage.py         # 用户数据、在线状态<br>
-└── start.py               # 启动脚本
+<!-- 全屏水印层 -->
+<div class="watermark-layer" id="watermarkLayer"></div>
+
+<!-- 密码验证遮罩层 -->
+<div class="password-overlay" id="passwordOverlay">
+    <div class="password-card">
+        <h3>🔐 项目技术文档</h3>
+        <p>请输入访问密码 · 仅限内部技术交流</p>
+        <input type="password" id="passwordInput" placeholder="请输入密码" autofocus>
+        <div class="error-msg" id="errorMsg">密码错误，请重试</div>
+        <button id="submitBtn">验证进入</button>
     </div>
+</div>
 
-    <!-- common模块 -->
-    <h2>二、common模块 — 公共部分</h2>
-    
-    <h3>1. crypto.py 加密函数</h3>
+<!-- 文档主体 -->
+<div class="doc" id="docContent">
+    <h1>🔒 安全聊天室 · 项目技术文档</h1>
+    <div class="sub">AES-256-GCM 端到端加密 | PyQt5客户端 | Python服务端 | 仅用于技术交流</div>
+
+    <!-- 项目概述 -->
+    <h2>📋 项目概述</h2>
+    <p>本项目实现了一个基于 <strong>TCP Socket</strong> 的端到端加密聊天室，采用 <strong>AES-256-GCM</strong> 算法保障消息机密性与完整性，<strong>PBKDF2</strong> 进行密钥派生。客户端使用 PyQt5 构建图形界面，服务端支持多用户并发、在线状态管理及异地登录踢出机制。</p>
+
+    <!-- 快速开始 -->
+    <h2>🚀 快速开始</h2>
+    <div class="file-tree">
+        <strong>📁 项目文件列表</strong><br>
+        ├── client.py        # 客户端入口（登录、密钥派生、网络连接）<br>
+        ├── server.py        # 服务端主程序（用户认证、消息路由、会话管理）<br>
+        ├── ui.py            # PyQt5聊天界面（消息收发、在线列表、定时刷新）<br>
+        └── crypto_aes.py    # AES-GCM加密模块（PBKDF2密钥派生、加解密接口）
+    </div>
     <ul>
-        <li><code>enc_msg(msg, key)</code> — AES-256-GCM加密，返回包含 nonce、密文、tag 的字典</li>
-        <li><code>dec_msg(data, key)</code> — 解密并验证GCM标签，解密失败抛异常</li>
-        <li><code>rsa_enc(pub_pem, data)</code> — RSA公钥加密（OAEP填充）</li>
-        <li><code>rsa_dec(priv_pem, data)</code> — RSA私钥解密</li>
-        <li><code>gen_rsa()</code> — 生成RSA-2048密钥对，返回PEM格式字符串</li>
-        <li><code>check_keys()</code> — 检查密钥文件是否存在，不存在则自动生成</li>
+        <li>✅ <strong>预置账号密码：</strong> <code>zuorengang / 2026</code> &nbsp;&nbsp; <code>ceshi / 2026</code></li>
+        <li>✅ <strong>主密钥（Master Key）：</strong> 固定32字节Hex字符串（<span class="highlight">用于生产环境建议使用动态密钥交换</span>）</li>
+        <li>✅ <strong>启动顺序：</strong> 先运行 <code>server.py</code> → 再运行 <code>client.py</code> → 多开客户端测试群聊</li>
     </ul>
-    <p style="font-size:13px; color:#555;">注：<code>enc_with_pwd/dec_with_pwd</code> 函数虽然在代码里但登录流程没用上，忽略。</p>
 
-    <h3>2. protocol.py 消息类型</h3>
+    <!-- 核心架构 -->
+    <h2>🏗️ 核心架构设计</h2>
+    <h3>1️⃣ 客户端 (client.py + ui.py)</h3>
+    <ul>
+        <li><strong>认证流程：</strong> 用户名/密码 → PBKDF2派生密钥 → AES-GCM加密凭证 → 发送服务端验证</li>
+        <li><strong>会话管理：</strong> 登录成功后获取服务端下发的 <code>session_token</code>，后续所有请求需携带该令牌</li>
+        <li><strong>UI线程与网络线程分离：</strong> 接收线程独立运行，避免界面卡顿</li>
+        <li><strong>定时拉取在线列表：</strong> 每3秒通过 <code>QTimer</code> 发送 <code>get_online_users</code> 请求</li>
+    </ul>
+
+    <h3>2️⃣ 服务端 (server.py)</h3>
+    <ul>
+        <li><strong>用户认证：</strong> SHA256哈希存储密码，验证后生成唯一 session_token</li>
+        <li><strong>消息路由：</strong> 根据 <code>to</code> 字段查找目标用户socket，直接转发消息</li>
+        <li><strong>并发处理：</strong> 每个客户端独立线程，使用全局字典维护在线用户与session映射</li>
+        <li><strong>踢出机制：</strong> 同一账号重复登录时，服务端向旧连接发送 <code>kick</code> 消息</li>
+    </ul>
+
+    <h3>3️⃣ 加密模块 (crypto_aes.py)</h3>
     <div class="table-wrap">
         <table>
-            <tr><th>常量</th><th>值</th><th>说明</th></tr>
-            <tr><td>TYPE_KEY_EXCHANGE</td><td>'key_exchange'</td><td>客户端发送加密的会话密钥</td></tr>
-            <tr><td>TYPE_KEY_EXCHANGE_OK</td><td>'key_exchange_ok'</td><td>服务端确认密钥交换完成</td></tr>
-            <tr><td>TYPE_RECV_MESSAGE</td><td>'recv_message'</td><td>服务端转发消息给接收方</td></tr>
-            <tr><td>TYPE_ONLINE_USERS</td><td>'online_users'</td><td>服务端返回在线用户列表</td></tr>
-            <tr><td>TYPE_KICK</td><td>'kick'</td><td>踢出通知（异地登录）</td></tr>
-            <tr><td>TYPE_CLIENT_BYE</td><td>'client_bye'</td><td>客户端退出通知</td></tr>
-            <tr><td>CMD_LOGIN</td><td>'login'</td><td>登录命令</td></tr>
-            <tr><td>CMD_SEND_MESSAGE</td><td>'send_message'</td><td>发送消息命令</td></tr>
-            <tr><td>CMD_GET_ONLINE_USERS</td><td>'get_online_users'</td><td>请求在线用户列表</td></tr>
+            <tr><th>函数</th><th>参数</th><th>说明</th></tr>
+            <tr><td><code>encrypt_gcm(msg, password)</code></td><td>明文消息, 主密钥</td><td>随机生成salt+nonce，PBKDF2派生密钥，返回base64编码的加密字典</td></tr>
+            <tr><td><code>decrypt_gcm(encrypted, password)</code></td><td>加密字典, 主密钥</td><td>反解salt+nonce，派生密钥后解密并验证GCM tag</td></tr>
         </table>
     </div>
 
-    <h3>3. config.py 配置项</h3>
+    <!-- 通信协议 -->
+    <h2>📡 通信协议定义</h2>
+    <h3>🔹 客户端 → 服务端</h3>
+    <div class="code-block">
+{
+  "commond": "login",           // 登录命令
+  "data": {                     // AES-GCM加密后的凭证
+    "salt": "xxx",
+    "nonce": "xxx", 
+    "ciphertext": "xxx",
+    "tag": "xxx"
+  }
+}
+
+{
+  "commond": "send_message",    // 发送消息
+  "session": "uuid+timestamp",
+  "data": {
+    "to": "目标用户",
+    "msg": "消息内容(明文传输，生产环境应二次加密)"
+  }
+}
+
+{
+  "commond": "get_online_users", // 获取在线用户
+  "session": "uuid+timestamp"
+}
+
+{
+  "type": "client_bye",          // 退出通知
+  "session": "uuid+timestamp"
+}
+    </div>
+
+    <h3>🔹 服务端 → 客户端</h3>
+    <div class="code-block">
+{
+  "code": 0,                     // 登录响应 (0成功 1密码错误 2异常)
+  "session": "xxx",
+  "msg": "登录成功"
+}
+
+{
+  "type": "recv_message",
+  "from": "发送者",
+  "msg": "消息内容"
+}
+
+{
+  "type": "online_users",
+  "users": ["alice", "bob"]
+}
+
+{
+  "type": "kick",
+  "msg": "您在其他地方登录"
+}
+    </div>
+
+    <!-- 安全机制 -->
+    <h2>🛡️ 安全机制说明</h2>
     <ul>
-        <li><code>SERVER_HOST = '127.0.0.1'</code></li>
-        <li><code>SERVER_PORT = 9999</code></li>
-        <li><code>RSA_PRIVATE_KEY_FILE = "Own_key.Encryption"</code></li>
-        <li><code>RSA_PUBLIC_KEY_FILE = "Public_key.Encryption"</code></li>
-        <li><code>TIMEOUT_SECONDS = 60</code> — 服务端socket超时时间</li>
+        <li><strong>传输加密：</strong> 登录凭证使用 AES-256-GCM 加密，防止中间人窃听</li>
+        <li><strong>密钥派生：</strong> PBKDF2 + 随机盐 (100,000次迭代) 抗暴力破解</li>
+        <li><strong>完整性校验：</strong> GCM模式自带认证标签，防篡改</li>
+        <li><strong>会话令牌：</strong> UUID + 时间戳，防重放攻击</li>
+        <li><strong>异地登录防护：</strong> 服务端检测重复登录主动踢出旧连接</li>
+        <li><strong>⚠️ 生产环境改进点：</strong> 消息内容应使用临时会话密钥加密，而非明文传输</li>
     </ul>
 
-    <!-- client模块 -->
-    <h2>三、client模块 — 客户端</h2>
-    
-    <h3>1. main.py 启动流程</h3>
+    <!-- 运行方式 -->
+    <h2>💻 环境依赖与运行</h2>
+    <div class="file-tree">
+        <strong>Python 3.8+ 环境</strong><br>
+        pip install pycryptodome pyqt5
+    </div>
     <ul>
-        <li>调用 <code>load_pub_key()</code> 读取RSA公钥文件</li>
-        <li><code>os.urandom(32)</code> 生成随机AES会话密钥</li>
-        <li><code>conn_server()</code> 连接服务端</li>
-        <li><code>do_key_ex()</code> 用RSA公钥加密会话密钥并发给服务端</li>
-        <li>用户输入用户名和密码</li>
-        <li><code>enc_msg(f"{user}:{pwd}", session_key)</code> 加密登录凭证</li>
-        <li><code>send_login_info()</code> 发送登录请求，接收返回的token</li>
-        <li>登录成功后调用 <code>start_ui()</code> 启动聊天窗口</li>
-    </ul>
-
-    <h3>2. network.py 网络函数</h3>
-    <ul>
-        <li><code>conn_server()</code> — 创建socket连接服务器</li>
-        <li><code>do_key_ex(sock, pub_key, session_key)</code> — RSA加密session_key并发送，等待确认</li>
-        <li><code>send_login_info(sock, encrypted_creds)</code> — 发送加密的登录信息，返回服务端响应</li>
-        <li><code>send_raw_data(sock, data)</code> — 发送原始数据</li>
-    </ul>
-
-    <h3>3. ui.py 聊天窗口 (ChatWin)</h3>
-    <ul>
-        <li>继承 <code>QMainWindow</code>，使用 <code>pyqtSignal</code> 处理跨线程消息更新</li>
-        <li>界面组件：消息区域(QTextEdit)、用户下拉框(QComboBox)、输入框(QLineEdit)、发送按钮、退出按钮</li>
-        <li><code>send_msg()</code> — 获取目标用户和消息内容，AES加密后发送 <code>send_message</code> 命令</li>
-        <li><code>get_users()</code> — 被QTimer触发（间隔1秒），请求在线用户列表</li>
-        <li><code>start_recv()</code> — 独立线程循环接收数据：
-            <ul>
-                <li><code>type == 'recv_message'</code> → 解密并显示消息</li>
-                <li><code>type == 'online_users'</code> → 更新下拉框和状态栏</li>
-                <li><code>type == 'kick'</code> → 显示被踢提示并退出</li>
-            </ul>
-        </li>
-        <li><code>exit_chat()</code> — 发送 <code>client_bye</code>，关闭socket，退出界面</li>
-    </ul>
-
-    <!-- server模块 -->
-    <h2>四、server模块 — 服务端</h2>
-
-    <h3>1. main.py 服务端入口</h3>
-    <ul>
-        <li>创建socket，绑定 <code>127.0.0.1:9999</code>，开始监听</li>
-        <li>循环accept，每个客户端新建线程执行 <code>ClientHandler(sock, addr).handle()</code></li>
-    </ul>
-
-    <h3>2. handler.py ClientHandler类</h3>
-    <ul>
-        <li><code>handle()</code> — 主循环，先处理密钥交换，然后处理登录、消息等命令</li>
-        <li><code>do_key_ex(data)</code> — 读取RSA私钥，解密获得AES会话密钥，保存在 <code>self.key</code></li>
-        <li><code>do_login(data)</code> — 解密登录凭证，调用 <code>check_pwd()</code> 验证，成功则生成token并存储会话信息</li>
-        <li><code>send_msg(to_user, encrypted)</code> — 用发送方密钥解密消息，再用接收方密钥重新加密，转发给目标用户</li>
-        <li><code>send_users()</code> — 返回当前所有在线用户名</li>
-        <li><code>cleanup()</code> — 断开连接时从 online_users、session_to_user、user_session_key 中移除记录</li>
-        <li>踢出逻辑：登录时如果用户已在 online_users 中，给旧socket发送 kick 消息</li>
-    </ul>
-
-    <h3>3. storage.py 数据存储</h3>
-    <ul>
-        <li><code>USER_DB</code> 字典：用户名 → SHA256(密码)</li>
-        <li>预置账号：alice/123456、bob/123456、charlie/password</li>
-        <li><code>online_users = {}</code> — 用户名 → socket对象</li>
-        <li><code>session_to_user = {}</code> — token → 用户名</li>
-        <li><code>user_session_key = {}</code> — 用户名 → AES会话密钥</li>
-        <li><code>check_pwd(user, pwd)</code> — 验证密码</li>
-        <li><code>add_user(user, pwd)</code> — 添加新用户</li>
-    </ul>
-
-    <!-- start.py -->
-    <h2>五、start.py 启动脚本</h2>
-    <ul>
-        <li><code>python start.py server</code> — 启动服务端</li>
-        <li><code>python start.py client</code> — 启动客户端</li>
-        <li>自动设置项目根目录到sys.path，方便模块导入</li>
+        <li>1️⃣ 启动服务端：<code>python server.py</code> （监听 0.0.0.0:9999）</li>
+        <li>2️⃣ 启动客户端：<code>python client.py</code> （输入账号 zuorengang / 2026）</li>
+        <li>3️⃣ 多开测试：再次运行 client.py 使用 ceshi / 2026 登录，即可实现两个账号互发消息</li>
     </ul>
 
     <!-- 通信流程 -->
-    <h2>六、通信流程</h2>
+    <h2>🔄 完整通信流程图</h2>
     <div class="flow">
-客户端                                        服务端<br>
-  |---- ① key_exchange (RSA加密session_key) ---->|<br>
-  |<---- ② key_exchange_ok ----------------------|<br>
-  |---- ③ login (AES加密 user:pass) ------------>|<br>
-  |<---- ④ {code:0, session: token} -------------|<br>
-  |---- ⑤ get_online_users --------------------->|<br>
-  |<---- ⑥ online_users 列表 --------------------|<br>
-  |---- ⑦ send_message (AES加密消息) ----------->|<br>
-  |        [服务端解密 → 用接收方密钥重加密]       |<br>
-  |<---- ⑧ recv_message (转发加密消息) -----------|<br>
-  |---- ⑨ client_bye --------------------------->|<br>
-  +--- 连接关闭
+┌─────────┐                                          ┌─────────┐
+│ Client1 │                                          │ Server  │
+└────┬────┘                                          └────┬────┘
+     │  ① login (AES加密 user:pass)                       │
+     │ ──────────────────────────────────────────────────>│
+     │                                                    │ 验证密码 + 生成session
+     │  ② {code:0, session:xxx}                          │
+     │ <──────────────────────────────────────────────────│
+     │                                                    │
+     │  ③ get_online_users (携带session)                  │
+     │ ──────────────────────────────────────────────────>│
+     │  ④ {type:'online_users', users:[...]}             │
+     │ <──────────────────────────────────────────────────│
+     │                                                    │
+     │  ⑤ send_message {to:user2, msg:hello}             │
+     │ ──────────────────────────────────────────────────>│
+     │                                                    │ 路由查找user2的socket
+     │  ⑥ {type:'recv_message', from:user1, msg:hello}   │
+     │ <──────────────────────────────────────────────────│
+     │                                                    │
+     │  ⑦ client_bye                                      │
+     │ ──────────────────────────────────────────────────>│
+     │                                                    │ 清理session+在线状态
     </div>
 
-    <!-- 运行说明 -->
-    <h2>七、运行方式</h2>
+    <!-- 扩展建议 -->
+    <h2>📌 扩展建议</h2>
     <ul>
-        <li>安装依赖：<code>pip install pycryptodome pyqt5</code></li>
-        <li>首次运行会自动生成RSA密钥对（Own_key.Encryption 和 Public_key.Encryption）</li>
-        <li>先启动服务端：<code>python start.py server</code></li>
-        <li>再启动客户端：<code>python start.py client</code></li>
-        <li>可以同时启动多个客户端测试聊天</li>
+        <li>🔐 实现 RSA 握手交换 AES 临时密钥</li>
+        <li>💾 服务端接入 MySQL 持久化用户数据</li>
+        <li>📁 支持文件传输（分块加密发送）</li>
+        <li>🎨 UI 优化：消息气泡、表情包、通知提醒</li>
     </ul>
 
     <hr>
     <div class="footer">
-         · 根据项目源码整理
+        本项目仅供学习交流 · 技术文档自动生成 | 密码统一为 <strong>2026</strong> (账号 zuorengang / ceshi)<br>
+        水印内容：左仁刚 · 中考自主招生技术交流项目
     </div>
 </div>
+
+<script>
+    // 密码设置为 2026
+    const CORRECT_PASSWORD = "2026";
+    
+    // 生成全屏水印
+    function generateWatermark() {
+        const container = document.getElementById('watermarkLayer');
+        if (!container) return;
+        
+        const watermarkText = '左仁刚 · 中考自主招生技术交流项目';
+        const cols = 12;  // 横向数量
+        const rows = 20;   // 纵向数量
+        
+        container.innerHTML = '';
+        
+        for (let i = 0; i < rows; i++) {
+            for (let j = 0; j < cols; j++) {
+                const div = document.createElement('div');
+                div.className = 'watermark-text';
+                div.textContent = watermarkText;
+                // 计算位置：间隔约 180px 宽度，100px 高度
+                div.style.left = (j * 180 + 30) + 'px';
+                div.style.top = (i * 100 + 30) + 'px';
+                div.style.opacity = '0.06';
+                div.style.fontSize = '13px';
+                div.style.color = '#000';
+                div.style.fontWeight = 'normal';
+                container.appendChild(div);
+            }
+        }
+    }
+    
+    // 动态水印防删除（MutationObserver）
+    let watermarkObserver = null;
+    
+    function initWatermarkProtection() {
+        generateWatermark();
+        
+        // 监听水印层变化，防止被删除或修改
+        const targetNode = document.getElementById('watermarkLayer');
+        if (!targetNode) return;
+        
+        watermarkObserver = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                if (mutation.type === 'childList' && mutation.removedNodes.length > 0) {
+                    // 水印被删，重新生成
+                    generateWatermark();
+                } else if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
+                    // 样式被改，重置
+                    generateWatermark();
+                }
+            });
+        });
+        
+        watermarkObserver.observe(targetNode, {
+            childList: true,
+            attributes: true,
+            subtree: true,
+            attributeFilter: ['style', 'class']
+        });
+    }
+    
+    // 作者弹窗
+    function showAuthorModal() {
+        const modal = document.createElement('div');
+        modal.style.position = 'fixed';
+        modal.style.top = '0';
+        modal.style.left = '0';
+        modal.style.width = '100%';
+        modal.style.height = '100%';
+        modal.style.backgroundColor = 'rgba(0,0,0,0.75)';
+        modal.style.backdropFilter = 'blur(5px)';
+        modal.style.zIndex = '10001';
+        modal.style.display = 'flex';
+        modal.style.alignItems = 'center';
+        modal.style.justifyContent = 'center';
+        
+        const modalCard = document.createElement('div');
+        modalCard.style.background = 'linear-gradient(135deg, #1a2a3a, #0f1724)';
+        modalCard.style.borderRadius = '28px';
+        modalCard.style.padding = '32px 28px';
+        modalCard.style.maxWidth = '380px';
+        modalCard.style.width = '85%';
+        modalCard.style.textAlign = 'center';
+        modalCard.style.boxShadow = '0 25px 45px rgba(0,0,0,0.6)';
+        modalCard.style.border = '1px solid rgba(79,157,105,0.5)';
+        modalCard.style.animation = 'fadeInUp 0.3s ease';
+        
+        modalCard.innerHTML = `
+            <div style="font-size: 52px; margin-bottom: 12px;">🔐</div>
+            <h3 style="color: #fff; font-size: 24px; margin-bottom: 12px;">作者 & 技术说明</h3>
+            <p style="color: #cbd5e6; font-size: 15px; line-height: 1.6; margin-bottom: 12px;">
+                本项目由 <strong style="color: #6c9e7c;">左仁刚</strong> 开发维护<br>
+                基于 <strong>AES-256-GCM + PBKDF2</strong> 加密聊天室
+            </p>
+            <p style="color: #8aa0b5; font-size: 13px; margin: 16px 0 8px 0;">
+                🔒 仅用于中考自主招生技术交流<br>
+                服务端账号密码已统一为 <strong style="color:#4f9d69">2026</strong>
+            </p>
+            <button id="closeModalBtn" style="margin-top: 20px; padding: 10px 28px; background: linear-gradient(135deg, #4f9d69, #2c7a47); border: none; border-radius: 40px; color: white; font-weight: bold; cursor: pointer; font-size: 14px;">确认</button>
+        `;
+        
+        modal.appendChild(modalCard);
+        document.body.appendChild(modal);
+        
+        const closeBtn = modalCard.querySelector('#closeModalBtn');
+        closeBtn.addEventListener('click', () => {
+            modal.remove();
+        });
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) modal.remove();
+        });
+    }
+    
+    // 密码验证逻辑
+    const overlay = document.getElementById('passwordOverlay');
+    const docContent = document.getElementById('docContent');
+    const passwordInput = document.getElementById('passwordInput');
+    const submitBtn = document.getElementById('submitBtn');
+    const errorMsg = document.getElementById('errorMsg');
+    
+    function verifyPassword() {
+        const enteredPassword = passwordInput.value.trim();
+        
+        if (enteredPassword === CORRECT_PASSWORD) {
+            // 密码正确
+            overlay.style.opacity = '0';
+            setTimeout(() => {
+                overlay.style.display = 'none';
+                docContent.classList.add('visible');
+                // 生成水印
+                initWatermarkProtection();
+                // 显示作者弹窗
+                showAuthorModal();
+            }, 300);
+        } else {
+            errorMsg.style.display = 'block';
+            passwordInput.value = '';
+            passwordInput.focus();
+        }
+    }
+    
+    passwordInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            verifyPassword();
+        }
+    });
+    
+    submitBtn.addEventListener('click', verifyPassword);
+    
+    // 初始隐藏文档
+    docContent.classList.remove('visible');
+</script>
 </body>
 </html>
